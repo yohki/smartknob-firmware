@@ -132,7 +132,8 @@ void RootTask::run()
         switch (os_config->mode)
         {
         case ONBOARDING:
-            display_task_->enableOnboarding();
+            display_task_->enableMyApp();
+            //display_task_->enableOnboarding();
             this->configuration_->saveOSConfiguration(*os_config);
             break;
         case DEMO:
@@ -182,6 +183,8 @@ void RootTask::run()
     display_task_->getHassApps()->setMotorNotifier(&motor_notifier);
     display_task_->getHassApps()->setOSConfigNotifier(&os_config_notifier_);
 
+    display_task_->getMyApp()->setMotorNotifier(&motor_notifier);
+
     // TODO: move playhaptic to notifier? or other interface to just pass "possible" motor commands not entire object/class.
     reset_task_->setMotorTask(&motor_task_);
 
@@ -191,7 +194,8 @@ void RootTask::run()
     {
     case ONBOARDING:
         os_config_notifier_.setOSMode(ONBOARDING);
-        display_task_->enableOnboarding();
+        // display_task_->enableOnboarding();
+        display_task_->enableMyApp();
         break;
     case DEMO:
         os_config_notifier_.setOSMode(ONBOARDING);

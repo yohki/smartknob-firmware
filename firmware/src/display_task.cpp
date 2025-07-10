@@ -67,6 +67,15 @@ ErrorHandlingFlow *DisplayTask::getErrorHandlingFlow()
     return error_handling_flow;
 }
 
+MyApp *DisplayTask::getMyApp()
+{
+    while (myapp == nullptr)
+    {
+        delay(50);
+    }
+    return myapp;
+}
+
 void DisplayTask::run()
 {
     ledcSetup(LEDC_CHANNEL_LCD_BACKLIGHT, 5000, SK_BACKLIGHT_BIT_DEPTH);
@@ -81,6 +90,8 @@ void DisplayTask::run()
     demo_apps = new DemoApps(mutex_);
     hass_apps = new HassApps(mutex_);
     error_handling_flow = new ErrorHandlingFlow(mutex_);
+    myapp = new MyApp(mutex_);
+
     while (display_os_mode == UNSET)
     {
         delay(50);
@@ -125,5 +136,12 @@ void DisplayTask::enableHass()
     display_os_mode = HASS;
     hass_apps->render();
     hass_apps->triggerMotorConfigUpdate();
+}
+
+void DisplayTask::enableMyApp()
+{
+    display_os_mode = ONBOARDING;
+    myapp->render();
+    myapp->triggerMotorConfigUpdate();
 }
 #endif

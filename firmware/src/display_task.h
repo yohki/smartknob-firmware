@@ -18,6 +18,8 @@
 #include "onboarding_flow/onboarding_flow.h"
 #include "error_handling_flow/error_handling_flow.h"
 
+#include "apps/myapp/myapp.h"
+
 const uint8_t BOOT_MODE_NOT_SET = 0;
 const uint8_t BOOT_MODE_ONBOARDING = 1;
 const uint8_t BOOT_MODE_HASS = 2;
@@ -36,10 +38,12 @@ public:
     OnboardingFlow *getOnboardingFlow();
     DemoApps *getDemoApps();
     HassApps *getHassApps();
+    MyApp *getMyApp();
 
     void enableOnboarding();
     void enableHass();
     void enableDemo();
+    void enableMyApp();
 
     ErrorHandlingFlow *getErrorHandlingFlow();
 
@@ -49,6 +53,8 @@ protected:
     void run();
 
 private:
+    MyApp *myapp = nullptr;
+
     OnboardingFlow *onboarding_flow = nullptr;
     DemoApps *demo_apps = nullptr;
     HassApps *hass_apps = nullptr;
