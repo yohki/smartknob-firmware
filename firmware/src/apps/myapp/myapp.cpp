@@ -1,14 +1,93 @@
 #include "myapp.h"
 
-MyApp::MyApp(SemaphoreHandle_t mutex) : App(mutex)
+MyApp::MyApp(SemaphoreHandle_t mutex) : mutex_(mutex)
 {
-    root_level_motor_config = motor_config1;
-    root_level_motor_config.position = current_position;
     LOGI("MyApp initialized!");
+    current_config = config1;
+}
+
+void MyApp::render()
+{
+    current_config.position = current_position;
+    motor_notifier->requestUpdate(current_config); // Prevents state after moving back from submenus to be reset to page 0, i.e. moves user to correct page on the onboarding menu.
+}
+
+void MyApp::handleNavigationEvent(NavigationEvent event)
+{
+}
+
+EntityStateUpdate MyApp::update(AppState state)
+{
+    return updateStateFromKnob(state.motor_state);
 }
 
 EntityStateUpdate MyApp::updateStateFromKnob(PB_SmartKnobState state)
 {
-    LOGI("Position: %d", state.current_position);
-    return EntityStateUpdate();
+    LOGI("L: %d", state.current_position)
+    LOGI("S: %f", state.sub_position_unit)
+    EntityStateUpdate new_state;
+    return new_state;
+}
+
+void MyApp::setMotorNotifier(MotorNotifier *motor_notifier)
+{
+    this->motor_notifier = motor_notifier;
+}
+
+void MyApp::triggerMotorConfigUpdate()
+{
+    if (this->motor_notifier != nullptr)
+    {
+        motor_notifier->requestUpdate(current_config);
+    }
+    else
+    {
+        LOGW("Motor_notifier is not set");
+    }
+}
+
+void MyApp::setWiFiNotifier(WiFiNotifier *wifi_notifier)
+{
+    this->wifi_notifier = wifi_notifier;
+}
+
+void MyApp::setOSConfigNotifier(OSConfigNotifier *os_config_notifier)
+{
+    this->os_config_notifier = os_config_notifier;
+}
+
+void MyApp::handleEvent(WiFiEvent event)
+{
+    switch (event.type)
+    {
+    case SK_WIFI_AP_STARTED:
+    case SK_AP_CLIENT:
+    case SK_WEB_CLIENT:
+    case SK_WIFI_STA_TRY_NEW_CREDENTIALS:
+    case SK_WIFI_STA_TRY_NEW_CREDENTIALS_FAILED:
+    case SK_WEB_CLIENT_MQTT:
+    case SK_MQTT_TRY_NEW_CREDENTIALS:
+    case SK_MQTT_TRY_NEW_CREDENTIALS_FAILED:
+    case SK_MQTT_CONNECTED_NEW_CREDENTIALS:
+    case SK_MQTT_STATE_UPDATE:
+        break;
+    default:
+        break;
+    }
+}
+
+void MyApp::setMotorConfig(int i)
+{
+    if (i == 1)
+    {
+        current_config = config1;
+        triggerMotorConfigUpdate();
+        LOGI("CONFIG CHANGED, %d", i)
+    }
+    else if (i == 2)
+    {
+        current_config = config2;
+        triggerMotorConfigUpdate();
+        LOGI("CONFIG CHANGED, %d", i)
+    }
 }

@@ -35,7 +35,7 @@ public:
     QueueHandle_t getKnobStateQueue();
 
     void setBrightness(uint16_t brightness);
-    OnboardingFlow *getOnboardingFlow();
+    // OnboardingFlow *getOnboardingFlow();
     DemoApps *getDemoApps();
     HassApps *getHassApps();
     MyApp *getMyApp();
@@ -55,7 +55,7 @@ protected:
 private:
     MyApp *myapp = nullptr;
 
-    OnboardingFlow *onboarding_flow = nullptr;
+    // OnboardingFlow *onboarding_flow = nullptr;
     DemoApps *demo_apps = nullptr;
     HassApps *hass_apps = nullptr;
     ErrorHandlingFlow *error_handling_flow = nullptr;

@@ -99,6 +99,15 @@ void RootTask::run()
         serial_protocol_protobuf_->sendKnobInfo(knob);
     };
     serial_protocol_protobuf_->registerCommandCallback(PB_SmartKnobCommand_GET_KNOB_INFO, callbackGetKnobInfo);
+    serial_protocol_plaintext_->registerKeyHandler('1', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(1);
+        LOGI("1 KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('2', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(2);
+        LOGI("2 KEY PRESSED") });
 
     serial_protocol_plaintext_->registerKeyHandler('c', [this]()
                                                    { motor_task_.runCalibration(); });
@@ -164,12 +173,14 @@ void RootTask::run()
 
     reset_task_->setSharedEventsQueue(wifi_task_->getWiFiEventsQueue());
 
-    display_task_->getOnboardingFlow()->setMotorNotifier(&motor_notifier);
-    display_task_->getOnboardingFlow()->setOSConfigNotifier(&os_config_notifier_);
+    display_task_->getMyApp()->setMotorNotifier(&motor_notifier);
+    display_task_->getMyApp()->setOSConfigNotifier(&os_config_notifier_);
+    // display_task_->getOnboardingFlow()->setMotorNotifier(&motor_notifier);
+    // display_task_->getOnboardingFlow()->setOSConfigNotifier(&os_config_notifier_);
 #if SK_WIFI
     wifi_task_->setConfig(configuration_->getWiFiConfiguration());
-    display_task_->getOnboardingFlow()->setWiFiNotifier(wifi_task_->getNotifier());
-
+    display_task_->getMyApp()->setWiFiNotifier(wifi_task_->getNotifier());
+    // display_task_->getOnboardingFlow()->setWiFiNotifier(wifi_task_->getNotifier());
     display_task_->getErrorHandlingFlow()->setSharedEventsQueue(wifi_task_->getWiFiEventsQueue());
 #if SK_MQTT
     mqtt_task_->setConfig(configuration_->getMQTTConfiguration());
@@ -182,8 +193,6 @@ void RootTask::run()
     display_task_->getDemoApps()->setOSConfigNotifier(&os_config_notifier_);
     display_task_->getHassApps()->setMotorNotifier(&motor_notifier);
     display_task_->getHassApps()->setOSConfigNotifier(&os_config_notifier_);
-
-    display_task_->getMyApp()->setMotorNotifier(&motor_notifier);
 
     // TODO: move playhaptic to notifier? or other interface to just pass "possible" motor commands not entire object/class.
     reset_task_->setMotorTask(&motor_task_);
@@ -199,7 +208,8 @@ void RootTask::run()
         break;
     case DEMO:
         os_config_notifier_.setOSMode(ONBOARDING);
-        display_task_->enableOnboarding();
+        display_task_->enableMyApp();
+        // display_task_->enableOnboarding();
         break;
     case HASS:
         // os_config_notifier_.setOSMode(HASS);
@@ -235,7 +245,8 @@ void RootTask::run()
             switch (configuration_->getOSConfiguration()->mode)
             {
             case ONBOARDING:
-                display_task_->getOnboardingFlow()->handleEvent(wifi_event);
+                display_task_->getMyApp()->handleEvent(wifi_event);
+                // display_task_->getOnboardingFlow()->handleEvent(wifi_event);
                 app_state.screen_state.awake_until = millis() + 10000; // If in onboarding mode always stay awake.
                 app_state.screen_state.has_been_engaged = true;
                 break;
@@ -262,7 +273,8 @@ void RootTask::run()
                 switch (configuration_->getOSConfiguration()->mode)
                 {
                 case ONBOARDING:
-                    display_task_->enableOnboarding();
+                    display_task_->enableMyApp();
+                    // display_task_->enableOnboarding();
                     break;
                 case HASS:
                     display_task_->enableHass();
@@ -289,7 +301,8 @@ void RootTask::run()
                 switch (configuration_->getOSConfiguration()->mode)
                 {
                 case ONBOARDING:
-                    display_task_->enableOnboarding();
+                    display_task_->enableMyApp();
+                    // display_task_->enableOnboarding();
                     break;
                 case DEMO:
                     display_task_->enableDemo();
@@ -313,8 +326,10 @@ void RootTask::run()
                 switch (configuration_->getOSConfiguration()->mode)
                 {
                 case ONBOARDING:
-                    display_task_->enableOnboarding();
-                    display_task_->getOnboardingFlow()->triggerMotorConfigUpdate();
+                    display_task_->enableMyApp();
+                    // display_task_->enableOnboarding();
+                    display_task_->getMyApp()->triggerMotorConfigUpdate();
+                    // display_task_->getOnboardingFlow()->triggerMotorConfigUpdate();
                     break;
                 case DEMO:
                     display_task_->enableDemo();
@@ -443,7 +458,8 @@ void RootTask::run()
             case OSMode::ONBOARDING:
                 if (strcmp(latest_state_.config.id, "ONBOARDING") == 0)
                 {
-                    entity_state_update_to_send = display_task_->getOnboardingFlow()->update(app_state);
+                    entity_state_update_to_send = display_task_->getMyApp()->update(app_state);
+                    // entity_state_update_to_send = display_task_->getOnboardingFlow()->update(app_state);
                 }
                 break;
             case OSMode::DEMO:
@@ -584,7 +600,8 @@ void RootTask::updateHardware(AppState *app_state)
                     switch (configuration_->getOSConfiguration()->mode)
                     {
                     case ONBOARDING:
-                        display_task_->getOnboardingFlow()->handleNavigationEvent(event);
+                        display_task_->getMyApp()->handleNavigationEvent(event);
+                        // display_task_->getOnboardingFlow()->handleNavigationEvent(event);
                         break;
                     case DEMO:
                         display_task_->getDemoApps()->handleNavigationEvent(event);
@@ -618,7 +635,8 @@ void RootTask::updateHardware(AppState *app_state)
                     switch (configuration_->getOSConfiguration()->mode)
                     {
                     case ONBOARDING:
-                        display_task_->getOnboardingFlow()->handleNavigationEvent(event);
+                        display_task_->getMyApp()->handleNavigationEvent(event);
+                        // display_task_->getOnboardingFlow()->handleNavigationEvent(event);
                         break;
                     case DEMO:
                         display_task_->getDemoApps()->handleNavigationEvent(event);

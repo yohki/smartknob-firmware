@@ -1,16 +1,37 @@
 #pragma once
 #include "apps/app.h"
+#include "notify/motor_notifier/motor_notifier.h"
+#include "notify/wifi_notifier/wifi_notifier.h"
+#include "notify/os_config_notifier/os_config_notifier.h"
 
-class MyApp : public App
+class MyApp
 {
 public:
     MyApp(SemaphoreHandle_t mutex);
+
+    void render();
+
+    EntityStateUpdate update(AppState state);
     EntityStateUpdate updateStateFromKnob(PB_SmartKnobState state);
 
-private:
-    int16_t current_position = 0;
+    void handleEvent(WiFiEvent event);
 
-    PB_SmartKnobConfig motor_config1 = PB_SmartKnobConfig{
+    void setWiFiNotifier(WiFiNotifier *wifi_notifier);
+    void setOSConfigNotifier(OSConfigNotifier *os_config_notifier);
+    void setMotorNotifier(MotorNotifier *motor_notifier);
+    void triggerMotorConfigUpdate();
+    void handleNavigationEvent(NavigationEvent event);
+
+    void setMotorConfig(int i);
+
+private:
+    SemaphoreHandle_t mutex_;
+
+    uint8_t current_position = 0;
+    char firmware_version[16];
+
+    PB_SmartKnobConfig current_config;
+    PB_SmartKnobConfig config1 = PB_SmartKnobConfig{
         // .position = 0,
         // .sub_position_unit = 0,
         // .position_nonce = 0,
@@ -29,14 +50,48 @@ private:
         0,
         0,
         10,
-        15 * PI / 180,
+        45 * PI / 180,
         2,
         1,
         0.55,
-        "MYAPP",
+        "ONBOARDING",
         0,
         {},
         0,
         20,
     };
+
+    PB_SmartKnobConfig config2 = PB_SmartKnobConfig{
+        // .position = 0,
+        // .sub_position_unit = 0,
+        // .position_nonce = 0,
+        // .min_position = 0,
+        // .max_position = 100,
+        // .position_width_radians = 2.4 * PI / 180,
+        // .detent_strength_unit = 1,
+        // .endstop_strength_unit = 1,
+        // .snap_point = 1.1,
+        // .detent_positions_count = 0,
+        // .detent_positions = {},
+        // .snap_point_bias = 0,
+        // .led_hue = 27,
+        0,
+        0,
+        0,
+        0,
+        180,
+        1 * PI / 180,
+        0,
+        1,
+        0.5,
+        "ONBOARDING",
+        0,
+        {},
+        0,
+        90,
+    };
+
+    WiFiNotifier *wifi_notifier;
+    OSConfigNotifier *os_config_notifier;
+    MotorNotifier *motor_notifier;
 };

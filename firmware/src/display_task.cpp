@@ -31,14 +31,14 @@ DisplayTask::~DisplayTask()
     vSemaphoreDelete(mutex_);
 }
 
-OnboardingFlow *DisplayTask::getOnboardingFlow()
-{
-    while (onboarding_flow == nullptr)
-    {
-        delay(50);
-    }
-    return onboarding_flow;
-}
+// OnboardingFlow *DisplayTask::getOnboardingFlow()
+// {
+//     while (onboarding_flow == nullptr)
+//     {
+//         delay(50);
+//     }
+//     return onboarding_flow;
+// }
 
 DemoApps *DisplayTask::getDemoApps()
 {
@@ -86,7 +86,7 @@ void DisplayTask::run()
     lv_skdk_create();
     lv_disp_drv_t *disp_drv = lv_skdk_get_disp_drv();
 
-    onboarding_flow = new OnboardingFlow(mutex_);
+    // onboarding_flow = new OnboardingFlow(mutex_);
     demo_apps = new DemoApps(mutex_);
     hass_apps = new HassApps(mutex_);
     error_handling_flow = new ErrorHandlingFlow(mutex_);
@@ -117,12 +117,12 @@ void DisplayTask::setBrightness(uint16_t brightness)
     lv_skdk_get_lcd()->setBrightness((((float)brightness / UINT16_MAX) * 255)); // Quickly implemented brightness for lvgl with old (current) impl.
 }
 
-void DisplayTask::enableOnboarding()
-{
-    display_os_mode = ONBOARDING;
-    onboarding_flow->render();
-    onboarding_flow->triggerMotorConfigUpdate();
-}
+// void DisplayTask::enableOnboarding()
+// {
+//     display_os_mode = ONBOARDING;
+//     onboarding_flow->render();
+//     onboarding_flow->triggerMotorConfigUpdate();
+// }
 
 void DisplayTask::enableDemo()
 {
