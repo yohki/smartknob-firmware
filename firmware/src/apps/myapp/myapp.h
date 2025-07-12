@@ -31,7 +31,8 @@ private:
     char firmware_version[16];
 
     PB_SmartKnobConfig current_config;
-    PB_SmartKnobConfig config1 = PB_SmartKnobConfig{
+
+    PB_SmartKnobConfig config0 = PB_SmartKnobConfig{
         // .position = 0,
         // .sub_position_unit = 0,
         // .position_nonce = 0,
@@ -49,7 +50,7 @@ private:
         0,
         0,
         0,
-        10,
+        1,
         45 * PI / 180,
         2,
         1,
@@ -61,7 +62,7 @@ private:
         20,
     };
 
-    PB_SmartKnobConfig config2 = PB_SmartKnobConfig{
+    PB_SmartKnobConfig config1 = PB_SmartKnobConfig{
         // .position = 0,
         // .sub_position_unit = 0,
         // .position_nonce = 0,
@@ -89,6 +90,83 @@ private:
         {},
         0,
         90,
+    };
+
+    PB_SmartKnobConfig config2 = PB_SmartKnobConfig{
+        // .position = 0,
+        // .sub_position_unit = 0,
+        // .position_nonce = 0,
+        // .min_position = 0,
+        // .max_position = 100,
+        // .position_width_radians = 2.4 * PI / 180,
+        // .detent_strength_unit = 1,
+        // .endstop_strength_unit = 1,
+        // .snap_point = 1.1,
+        // .detent_positions_count = 0,
+        // .detent_positions = {},
+        // .snap_point_bias = 0,
+        // .led_hue = 27,
+        0,
+        0,
+        0,
+        0,
+        4,
+        45 * PI / 180,
+        2,
+        1,
+        0.55,
+        "ONBOARDING",
+        0,
+        {},
+        0,
+        20,
+    };
+
+    PB_SmartKnobConfig config3 = PB_SmartKnobConfig{
+        // .position = 0,
+        // .sub_position_unit = 0,
+        // .position_nonce = 0,
+        // .min_position = 0,
+        // .max_position = 100,
+        // .position_width_radians = 2.4 * PI / 180,
+        // .detent_strength_unit = 1,
+        // .endstop_strength_unit = 1,
+        // .snap_point = 1.1,
+        // .detent_positions_count = 0,
+        // .detent_positions = {},
+        // .snap_point_bias = 0,
+        // .led_hue = 27,
+        0,
+        0,
+        0,
+        0,
+        180,
+        1 * PI / 180,
+        0,
+        1,
+        0.5,
+        "ONBOARDING",
+        0,
+        {},
+        0,
+        90,
+    };
+
+    PB_SmartKnobConfig config4 = PB_SmartKnobConfig{
+        0,
+        0,
+        7,
+        0,
+        31,
+        7 * PI / 180,
+        2.5,
+        1,
+        0.7,
+        "ONBOARDING",
+        4,
+        {2, 10, 21, 22},
+        0,
+        73,
     };
 
     WiFiNotifier *wifi_notifier;

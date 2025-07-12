@@ -3,7 +3,7 @@
 MyApp::MyApp(SemaphoreHandle_t mutex) : mutex_(mutex)
 {
     LOGI("MyApp initialized!");
-    current_config = config1;
+    current_config = config0;
 }
 
 void MyApp::render()
@@ -23,6 +23,10 @@ EntityStateUpdate MyApp::update(AppState state)
 
 EntityStateUpdate MyApp::updateStateFromKnob(PB_SmartKnobState state)
 {
+    if (current_position != state.current_position)
+    {
+        current_position = state.current_position;
+    }
     LOGI("L: %d", state.current_position)
     LOGI("S: %f", state.sub_position_unit)
     EntityStateUpdate new_state;
@@ -78,16 +82,40 @@ void MyApp::handleEvent(WiFiEvent event)
 
 void MyApp::setMotorConfig(int i)
 {
-    if (i == 1)
+    switch (i)
     {
+    case 0:
+        current_config = config0;
+        triggerMotorConfigUpdate();
+        LOGI("CONFIG CHANGED, %d", i)
+        break;
+    case 1:
+    case 3:
         current_config = config1;
+        current_config.position = current_position;
+        current_config.position_nonce = current_position;
+        current_config.min_position = current_position;
+        current_config.max_position = current_position + 180;
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
-    }
-    else if (i == 2)
-    {
+        break;
+    case 2:
         current_config = config2;
+        current_config.position = current_position;
+        current_config.position_nonce = current_position;
+        current_config.min_position = current_position;
+        current_config.max_position = current_position + 4;
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
+        break;
+    case 4:
+        current_config = config3;
+        current_config.position = current_position;
+        current_config.position_nonce = current_position;
+        triggerMotorConfigUpdate();
+        LOGI("CONFIG CHANGED, %d", i)
+        break;
+    default:
+        break;
     }
 }

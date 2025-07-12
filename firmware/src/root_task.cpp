@@ -99,6 +99,11 @@ void RootTask::run()
         serial_protocol_protobuf_->sendKnobInfo(knob);
     };
     serial_protocol_protobuf_->registerCommandCallback(PB_SmartKnobCommand_GET_KNOB_INFO, callbackGetKnobInfo);
+    serial_protocol_plaintext_->registerKeyHandler('0', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(0);
+        LOGI("0 KEY PRESSED") });
+
     serial_protocol_plaintext_->registerKeyHandler('1', [this]()
                                                    { 
         display_task_->getMyApp()->setMotorConfig(1);
@@ -108,6 +113,16 @@ void RootTask::run()
                                                    { 
         display_task_->getMyApp()->setMotorConfig(2);
         LOGI("2 KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('3', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(3);
+        LOGI("3 KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('4', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(4);
+        LOGI("4 KEY PRESSED") });
 
     serial_protocol_plaintext_->registerKeyHandler('c', [this]()
                                                    { motor_task_.runCalibration(); });
