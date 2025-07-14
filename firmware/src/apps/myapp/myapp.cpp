@@ -95,7 +95,7 @@ void MyApp::setMotorConfig(int i)
         current_config.position = current_position;
         current_config.position_nonce = current_position;
         current_config.min_position = current_position;
-        current_config.max_position = current_position + 180;
+        current_config.max_position = current_config.max_position + current_position;
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
         break;
@@ -104,14 +104,20 @@ void MyApp::setMotorConfig(int i)
         current_config.position = current_position;
         current_config.position_nonce = current_position;
         current_config.min_position = current_position;
-        current_config.max_position = current_position + 4;
+        current_config.max_position = current_config.max_position + current_position;
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
         break;
     case 4:
-        current_config = config3;
+        current_config = config4;
         current_config.position = current_position;
         current_config.position_nonce = current_position;
+        current_config.min_position = current_position;
+        current_config.max_position = current_config.max_position + current_position;
+        for (int i = 0; i < current_config.detent_positions_count; i++)
+        {
+            current_config.detent_positions[i] = current_config.detent_positions[i] + current_position;
+        }
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
         break;
