@@ -124,6 +124,16 @@ void RootTask::run()
         display_task_->getMyApp()->setMotorConfig(4);
         LOGI("4 KEY PRESSED") });
 
+    serial_protocol_plaintext_->registerKeyHandler('5', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(5);
+        LOGI("5 KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('6', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(6);
+        LOGI("6 KEY PRESSED") });
+
     serial_protocol_plaintext_->registerKeyHandler('c', [this]()
                                                    { motor_task_.runCalibration(); });
     serial_protocol_plaintext_->registerKeyHandler('w', [this]()

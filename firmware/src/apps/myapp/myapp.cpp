@@ -3,7 +3,7 @@
 MyApp::MyApp(SemaphoreHandle_t mutex) : mutex_(mutex)
 {
     LOGI("MyApp initialized!");
-    current_config = config0;
+    current_config = config_disc_1;
 }
 
 void MyApp::render()
@@ -84,14 +84,25 @@ void MyApp::setMotorConfig(int i)
 {
     switch (i)
     {
-    case 0:
-        current_config = config0;
+    case 0: // Blank
+    case 5: // Windchime intro
+        current_config = config_disc_1;
+        // current_config.position = current_position;
+        // current_config.position_nonce = current_position;
+        // current_config.min_position = current_position;
+        // current_config.max_position = current_config.max_position + current_position;
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
         break;
-    case 1:
-    case 3:
-        current_config = config1;
+    case 3: // Wave/Wind (disc.)
+        current_config = config_disc_2;
+        triggerMotorConfigUpdate();
+        LOGI("CONFIG CHANGED, %d", i)
+        break;
+    case 1: // Snow (cont.)
+    case 2: // Bird/Book (cont.)
+    case 4: // Car (cont.)
+        current_config = config_cont_270;
         current_config.position = current_position;
         current_config.position_nonce = current_position;
         current_config.min_position = current_position;
@@ -99,17 +110,8 @@ void MyApp::setMotorConfig(int i)
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
         break;
-    case 2:
-        current_config = config2;
-        current_config.position = current_position;
-        current_config.position_nonce = current_position;
-        current_config.min_position = current_position;
-        current_config.max_position = current_config.max_position + current_position;
-        triggerMotorConfigUpdate();
-        LOGI("CONFIG CHANGED, %d", i)
-        break;
-    case 4:
-        current_config = config4;
+    case 6: // Windchime cont.
+        current_config = config_cont_360;
         current_config.position = current_position;
         current_config.position_nonce = current_position;
         current_config.min_position = current_position;
