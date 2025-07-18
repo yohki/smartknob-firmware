@@ -134,8 +134,44 @@ void RootTask::run()
         display_task_->getMyApp()->setMotorConfig(6);
         LOGI("6 KEY PRESSED") });
 
+    // Backward
+    serial_protocol_plaintext_->registerKeyHandler('a', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(0, true);
+        LOGI("A KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('b', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(1, true);
+        LOGI("B KEY PRESSED") });
+
     serial_protocol_plaintext_->registerKeyHandler('c', [this]()
-                                                   { motor_task_.runCalibration(); });
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(2, true);
+        LOGI("C KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('d', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(3, true);
+        LOGI("D KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('e', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(4, true);
+        LOGI("E KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('f', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(5, true);
+        LOGI("F KEY PRESSED") });
+
+    serial_protocol_plaintext_->registerKeyHandler('g', [this]()
+                                                   { 
+        display_task_->getMyApp()->setMotorConfig(6, true);
+        LOGI("G KEY PRESSED") });
+
+    // serial_protocol_plaintext_->registerKeyHandler('c', [this]()
+    //                                                { motor_task_.runCalibration(); });
     serial_protocol_plaintext_->registerKeyHandler('w', [this]()
                                                    { sensors_task_->weightMeasurementCallback(); });
     serial_protocol_plaintext_->registerKeyHandler('y', [this]()

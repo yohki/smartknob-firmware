@@ -80,7 +80,7 @@ void MyApp::handleEvent(WiFiEvent event)
     }
 }
 
-void MyApp::setMotorConfig(int i)
+void MyApp::setMotorConfig(int i, bool backward)
 {
     switch (i)
     {
@@ -103,10 +103,20 @@ void MyApp::setMotorConfig(int i)
     case 2: // Bird/Book (cont.)
     case 4: // Car (cont.)
         current_config = config_cont_270;
-        current_config.position = current_position;
-        current_config.position_nonce = current_position;
-        current_config.min_position = current_position;
-        current_config.max_position = current_config.max_position + current_position;
+        if (backward)
+        {
+            current_config.position = current_position;
+            current_config.position_nonce = current_position;
+            current_config.min_position = current_position - current_config.max_position;
+            current_config.max_position = current_position;
+        }
+        else
+        {
+            current_config.position = current_position;
+            current_config.position_nonce = current_position;
+            current_config.min_position = current_position;
+            current_config.max_position = current_config.max_position + current_position;
+        }
         triggerMotorConfigUpdate();
         LOGI("CONFIG CHANGED, %d", i)
         break;

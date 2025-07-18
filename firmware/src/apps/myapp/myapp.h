@@ -22,7 +22,7 @@ public:
     void triggerMotorConfigUpdate();
     void handleNavigationEvent(NavigationEvent event);
 
-    void setMotorConfig(int i);
+    void setMotorConfig(int i, bool backward = false);
 
 private:
     SemaphoreHandle_t mutex_;
