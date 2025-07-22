@@ -82,6 +82,7 @@ void MyApp::handleEvent(WiFiEvent event)
 
 void MyApp::setMotorConfig(int i, bool backward)
 {
+    int rot_amount = 0;
     switch (i)
     {
     case 0: // Blank
@@ -96,42 +97,70 @@ void MyApp::setMotorConfig(int i, bool backward)
         break;
     case 3: // Wave/Wind (disc.)
         current_config = config_disc_2;
+        if (backward)
+        {
+            current_config.position = 1;
+            current_config.position_nonce = 1;
+            LOGI("CONFIG CHANGED, %d (INV)", i)
+        }
+        else
+        {
+            LOGI("CONFIG CHANGED, %d", i)
+        }
         triggerMotorConfigUpdate();
-        LOGI("CONFIG CHANGED, %d", i)
         break;
     case 1: // Snow (cont.)
     case 2: // Bird/Book (cont.)
     case 4: // Car (cont.)
         current_config = config_cont_270;
+        rot_amount = 270;
         if (backward)
         {
-            current_config.position = current_position;
-            current_config.position_nonce = current_position;
-            current_config.min_position = current_position - current_config.max_position;
-            current_config.max_position = current_position;
+            current_config.position = current_position + rot_amount;
+            current_config.position_nonce = current_position + rot_amount;
+            current_config.min_position = current_position - current_config.max_position + rot_amount;
+            current_config.max_position = current_position + rot_amount;
+            LOGI("CONFIG CHANGED, %d (INV)", i)
         }
         else
         {
             current_config.position = current_position;
             current_config.position_nonce = current_position;
             current_config.min_position = current_position;
-            current_config.max_position = current_config.max_position + current_position;
+            current_config.max_position = current_position + rot_amount;
+            LOGI("CONFIG CHANGED, %d", i)
         }
         triggerMotorConfigUpdate();
-        LOGI("CONFIG CHANGED, %d", i)
         break;
     case 6: // Windchime cont.
         current_config = config_cont_360;
-        current_config.position = current_position;
-        current_config.position_nonce = current_position;
-        current_config.min_position = current_position;
-        current_config.max_position = current_config.max_position + current_position;
-        for (int i = 0; i < current_config.detent_positions_count; i++)
+        rot_amount = 360;
+        if (backward)
         {
-            current_config.detent_positions[i] = current_config.detent_positions[i] + current_position;
+            current_config.position = current_position + rot_amount;
+            current_config.position_nonce = current_position + rot_amount;
+            current_config.min_position = current_position - current_config.max_position + rot_amount;
+            current_config.max_position = current_position + rot_amount;
+
+            for (int i = 0; i < current_config.detent_positions_count; i++)
+            {
+                current_config.detent_positions[i] = current_config.detent_positions[i] + current_position;
+            }
+            LOGI("CONFIG CHANGED, %d (INV)", i)
+        }
+        else
+        {
+            current_config.position = current_position;
+            current_config.position_nonce = current_position;
+            current_config.min_position = current_position;
+            current_config.max_position = current_position + rot_amount;
+            for (int i = 0; i < current_config.detent_positions_count; i++)
+            {
+                current_config.detent_positions[i] = current_config.detent_positions[i] + current_position;
+            }
+            LOGI("CONFIG CHANGED, %d", i)
         }
         triggerMotorConfigUpdate();
-        LOGI("CONFIG CHANGED, %d", i)
         break;
     default:
         break;
