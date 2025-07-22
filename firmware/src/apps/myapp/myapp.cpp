@@ -120,7 +120,7 @@ void MyApp::setMotorConfig(int i, bool backward)
             current_config.position_nonce = current_position + rot_amount;
             current_config.min_position = current_position - current_config.max_position + rot_amount;
             current_config.max_position = current_position + rot_amount;
-            LOGI("CONFIG CHANGED, %d (INV)", i)
+            LOGI("CONFIG CHANGED, %d (INV): Min:%d, Max:%d, Cur:%d", i, current_config.min_position, current_config.max_position, current_config.position)
         }
         else
         {
