@@ -52,3 +52,7 @@ firmware/data/config.pb
 .cache/
 compile_commands.json
 /Brainarium/Backup
+/.vscode
+/.vscode
+/Brainarium/Live
+/Brainarium/Log
